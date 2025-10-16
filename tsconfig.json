@@ -35,8 +35,7 @@
           "no-unknown-property": "off",
           "no-unknown-attribute": "off",
           "no-invalid-css": "off"
-        },
-        "globalTags": ["google-cast-launcher"]
+        }
       }
     ],
     "paths": {

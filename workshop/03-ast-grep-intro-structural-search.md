@@ -171,10 +171,10 @@ https://ast-grep.github.io/playground.html#eyJtb2RlIjoiUGF0Y2giLCJsYW5nIjoidHlwZ
 
 Notice the pattern `console.log($FIRST_ARG, $$$REMAINING_ARGS)` is shown at the top right of the Playground, and we have
 test code in the top left of the Playground:\
-![](ast-grep-playground-console-log-one-arg.png)
+![](03-ast-grep-intro-structural-search/ast-grep-playground-console-log-one-arg.png)
 
 In the bottom right of the Playground, you will see part of the AST tree that's used for our (structural) search pattern:\
-![](ast-grep-playground-pattern-console-log-ast-tree-strictness-smart.png)
+![](03-ast-grep-intro-structural-search/ast-grep-playground-pattern-console-log-ast-tree-strictness-smart.png)
 
 Notice that:
 
@@ -183,11 +183,11 @@ Notice that:
 
 Now change the strictness level to `ast`, what we previously already have do with `--strictness ast` on the
 command-line, and notice that the unnamed nodes `.`, `(`, `,` and `)` are no longer part of the AST tree of our pattern.\
-![](ast-grep-playground-pattern-console-log-ast-tree-strictness-ast.png.png)
+![](03-ast-grep-intro-structural-search/ast-grep-playground-pattern-console-log-ast-tree-strictness-ast.png.png)
 
 And with the changed strictness level, we now also have a match on the `console.log(err)` (call) expression in test code
 on the top left of the Playground now matches. \
-![](ast-grep-playground-pattern-console-log-matches.png)
+![](03-ast-grep-intro-structural-search/ast-grep-playground-pattern-console-log-matches.png)
 
 Notice `;` following `console.log(err)` is not matched.
 To understand why:
@@ -225,12 +225,12 @@ Change the strictness level in the AST tree of the pattern, in the bottom right 
 Then change the pattern in the top right of the Playground to `$A - $B` and notice that `1 + 2` statement is not matched
 (as expected).\
 And notice that `-` is part of the AST tree of the pattern:\
-![](ast-grep-playground-minus-ast-tree-smart.png)
+![](03-ast-grep-intro-structural-search/ast-grep-playground-minus-ast-tree-smart.png)
 
 Now change the strictness level in the AST tree of the pattern to `ast` and notice that `1 + 2` statement is now unwantedly matched.\
 As it turns out using `ast` strictness the `-` unnamed node is no longer part of the AST tree of the pattern,
 causing the `$A - $B` pattern to match with `1 + 2` 😱\
-![](ast-grep-playground-minus-ast-tree-ast.png)
+![](03-ast-grep-intro-structural-search/ast-grep-playground-minus-ast-tree-ast.png)
 
 ## Accounting for language syntax variations
 

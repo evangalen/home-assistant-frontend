@@ -77,7 +77,7 @@ Install the latest Opengrep Playground for your operating system using the instr
 https://github.com/opengrep/opengrep-playground
 
 Then after installation start it:\
-![](opengrep-playground-empty.png)
+![](04-opengrep-advanced-structural-search/opengrep-playground-empty.png)
 
 Copy the contents of the `src/cast/cast_manager.ts` file and paste it into `Code to Test` of the Opengrep Playground.
 

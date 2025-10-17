@@ -1,0 +1,60 @@
+## yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: remove-property-decorator-attribute-when-string
+language: ts
+files:
+  - src/panels/logbook/ha-logbook-renderer.ts
+  - src/state-display/state-display.ts
+  - src/components/ha-selector/ha-selector-date.ts
+  - src/components/ha-selector/ha-selector-area.ts
+  - src/onboarding/integration-badge.ts
+  - src/components/chart/state-history-charts.ts
+
+rule:
+  pattern:
+    context: |
+      { attribute: $ATTRIBUTE_VALUE }
+    selector: pair
+  inside:
+    stopBy: end
+    pattern: |
+      @property($OPTIONS_OBJECT)
+    inside:
+      kind: public_field_definition
+
+constraints:
+  ATTRIBUTE_VALUE:
+    kind: string
+  OPTIONS_OBJECT:
+    has:
+      kind: pair
+      nthChild: 2
+
+fix:
+  template: ""
+  expandStart: { regex: "," }
+  expandEnd: { regex: "," }
+
+---
+id: remove-property-decorator-attribute-when-string-single-pair
+language: ts
+files:
+  - src/panels/logbook/ha-logbook-renderer.ts
+  - src/state-display/state-display.ts
+  - src/components/ha-selector/ha-selector-date.ts
+  - src/components/ha-selector/ha-selector-area.ts
+  - src/onboarding/integration-badge.ts
+  - src/components/chart/state-history-charts.ts
+
+rule:
+  pattern: |
+    @property({ attribute: $ATTRIBUTE_VALUE })
+  inside:
+    kind: public_field_definition
+
+constraints:
+  ATTRIBUTE_VALUE:
+    kind: string
+
+fix:
+  template: "@property()"

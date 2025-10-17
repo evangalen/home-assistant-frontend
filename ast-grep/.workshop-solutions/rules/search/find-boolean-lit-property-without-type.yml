@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: find-boolean-lit-property-without-type
+language: ts
+rule:
+  any:
+    - pattern: |
+        @property()
+    - pattern: |
+        @property($PROPERTY_OPTIONS_WITHOUT_TYPE_AND_NO_ATTRIBUTE_FALSE)
+  inside:
+    kind: public_field_definition # matches any class field, even those with JS `#` prefix or TS `private` modifier
+    any:
+      - has: # `: boolean` type annotation
+          field: type
+          has: { kind: predefined_type, regex: ^boolean$ }
+      - has: # literal `true` or `false` value
+          field: value
+          regex: ^(true|false)$
+
+constraints:
+  PROPERTY_OPTIONS_WITHOUT_TYPE_AND_NO_ATTRIBUTE_FALSE:
+    kind: object
+    all:
+      - not:
+          has: # `type: Boolean` property
+            pattern:
+              context: |
+                { type: Boolean }
+              selector: pair
+      - not:
+          has: # `attribute: false` property
+            pattern:
+              context: |
+                {attribute: false }
+              selector: pair

@@ -1,0 +1,122 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+id: no-custom-element-decorator
+language: TypeScript
+
+rule:
+  pattern: $STATEMENT
+  any:
+    - kind: export_statement
+      matches: not-has-custom-element-decorator
+      has:
+        kind: class_declaration
+      not:
+        has: { pattern: "@customElement($_)" }
+    - kind: class_declaration
+      not:
+        inside: { kind: export_statement }
+      all:
+        - matches: has-type_identifier-with-class-name_meta-var
+        - matches: not-has-custom-element-decorator
+
+fix: |-
+  @customElement($CE_NAME)
+  $STATEMENT
+
+utils:
+  no-type-import-statement:
+    kind: import_statement
+    not:
+      pattern: import type { $$$_ } from $_
+  has-type_identifier-with-class-name_meta-var:
+    has:
+      kind: type_identifier
+      pattern: $CLASS_NAME
+
+  not-has-custom-element-decorator:
+    not:
+      has: { pattern: "@customElement($_)" }
+    inside:
+      kind: program
+      stopBy: end
+      has:
+        kind: expression_statement
+        has:
+          pattern: customElements.define($CE_NAME, $CLASS_NAME)
+---
+id: update-lit-decorators-import-for-custom-element-decorator
+language: TypeScript
+
+rule:
+  kind: import_clause
+  pattern: $IMPORT_CLAUSE
+  inside:
+    pattern: import { $$$IMPORT_SPECIFIERS } from "lit/decorators"
+    matches: no-type-import-statement
+constraints:
+  IMPORT_CLAUSE:
+    inside:
+      kind: program
+      stopBy: end
+      has:
+        pattern: customElements.define($CE_NAME, $CLASS_NAME)
+        stopBy: end
+      not:
+        has:
+          pattern: "@customElement($CE_NAME)"
+          stopBy: end
+
+fix:
+  template: "{ $$$IMPORT_SPECIFIERS, customElement }"
+
+utils:
+  no-type-import-statement:
+    kind: import_statement
+    not:
+      pattern: import type { $$$_ } from $_
+
+---
+id: add-lit-decorators-import-for-custom-element-decorator
+language: TypeScript
+
+rule:
+  all:
+    - pattern: import { $$$IMPORT_SPECIFIERS } from "lit"
+      matches: no-type-import-statement
+      inside:
+        kind: program
+        stopBy: end
+        has:
+          pattern: customElements.define($CE_NAME, $CLASS_NAME)
+          stopBy: end
+        not:
+          has:
+            pattern: import { $$$_ } from "lit/decorators"
+            matches: no-type-import-statement
+            stopBy: end
+
+    - pattern: $STATEMENT
+
+fix:
+  template: |-
+    $STATEMENT
+    import { customElement } from "lit/decorators";
+
+utils:
+  no-type-import-statement:
+    kind: import_statement
+    not:
+      pattern: import type { $$$_ } from $_
+
+---
+id: remove-unneeded-custom-elements-define
+language: TypeScript
+rule:
+  pattern: customElements.define($CE_NAME, $CLASS_NAME)
+  inside:
+    kind: program
+    stopBy: end
+    not:
+      has:
+        pattern: "@customElement($CE_NAME)"
+        stopBy: end
+fix: { template: "", expandEnd: { regex: ";" } }

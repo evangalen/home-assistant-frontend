@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: rewrite-lit-versions-to-v2
+language: json
+rule:
+  kind: string
+  inside:
+    field: value
+    pattern:
+      context: |
+        { "$NAME": "$_" }
+      selector: pair
+
+constraints:
+  NAME:
+    regex: ^(lit|lit-html)$
+
+fix: '"2.8.0"'

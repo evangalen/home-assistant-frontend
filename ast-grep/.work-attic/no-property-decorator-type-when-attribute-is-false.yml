@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+id: no-property-decorator-type-when-attribute-is-false
+language: ts
+severity: error
+message: "Unnecessary explicit type specified for @property decorator with `attribute: false`."
+
+rule:
+  pattern:
+    context: |
+      { type: $_ }
+    selector: pair
+  inside:
+    stopBy: end
+    pattern: |
+      @property($PROPERTY_OPTIONS)
+
+constraints:
+  PROPERTY_OPTIONS:
+    kind: object
+    has:
+      pattern:
+        context: |
+          { attribute: false }
+        selector: pair
+
+fix:
+  template: ""
+  expandStart: { regex: "," }
+  expandEnd: { regex: "," }

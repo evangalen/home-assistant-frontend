@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: missing-boolean-lit-property-type__non-existing-property-options
+language: ts
+rule:
+  any:
+    - pattern: "@property()"
+    - pattern: "@property({})"
+  inside:
+    kind: public_field_definition # matches any class field, even those with JS `#` prefix or TS `private` modifier
+    any:
+      - has: # `: boolean` type annotation
+          field: type
+          has: { kind: predefined_type, regex: ^boolean$ }
+      - has: # literal `true` or `false` value
+          field: value
+          regex: ^(true|false)$
+
+fix:
+  template: "@property({ type: Boolean })"
+
+---
+id: missing-boolean-lit-property-type__existing-property-options
+language: ts
+rule:
+  all:
+    - pattern: "@property($PROPERTY_OPTIONS_WITHOUT_TYPE_AND_NO_ATTRIBUTE_FALSE)"
+    - pattern: "@property({ $$$PAIRS })"
+    - not: # exclude `@property` with an empty options object, since `$$$PAIRS` can also be empty
+        pattern: "@property({})"
+  inside:
+    kind: public_field_definition # matches any class field, even those with JS `#` prefix or TS `private` modifier
+    any:
+      - has: # `: boolean` type annotation
+          field: type
+          has: { kind: predefined_type, regex: ^boolean$ }
+      - has: # literal `true` or `false` value
+          field: value
+          regex: ^(true|false)$
+
+constraints:
+  PROPERTY_OPTIONS_WITHOUT_TYPE_AND_NO_ATTRIBUTE_FALSE:
+    kind: object
+    all:
+      - not:
+          has: # `type: Boolean` property
+            pattern:
+              context: |
+                { type: Boolean }
+              selector: pair
+      - not:
+          has: # `attribute: false` property
+            pattern:
+              context: |
+                {attribute: false }
+              selector: pair
+
+fix:
+  template: "@property({ type: Boolean, $$$PAIRS })"

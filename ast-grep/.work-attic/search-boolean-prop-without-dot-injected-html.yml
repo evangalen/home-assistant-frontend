@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: search-boolean-props-without-dot
+language: html
+severity: hint
+rule:
+  pattern:
+    context: |
+      <TAG $ATTRIBUTE_NAME=$ATTRIBUTE_VALUE>
+    selector: attribute
+  inside:
+    kind: start_tag
+    has:
+      kind: tag_name
+      pattern: $TAG_NAME
+
+    # kind: attribute_name
+    # pattern: $ATTRIBUTE_NAME
+    # precedes:
+    #   pattern: $$IS
+    #   precedes:
+    #     kind: attribute_value
+    #   pattern: $ATTRIBUTE_VALUE
+  # inside:
+  #   kind: attribute
+  #   inside:
+  #     kind: start_tag
+  #     has:
+  #       kind: tag_name
+  #       pattern: $TAG_NAME
+constraints:
+  TAG_NAME:
+    regex: ^input$
+  #    all:
+  #      - not:
+  #          regex: '-'
+  #      - regex: '-'
+  #      - not: # workaround for `zwave_js-capability-control-multilevel_switch` tag
+  #          precedes:
+  #            kind: attribute
+  #            has:
+  #              kind: attribute_name
+  #              regex: ^_
+  #    regex: '^input$'
+  ATTRIBUTE_NAME:
+    #    all:
+    #      - regex: 'ed$'
+    #      - not:
+    #          regex: '^\.'
+    #      - not:
+    #          regex: '^\?'
+    #      - not:
+    #          regex: '^@'
+    any:
+      #      - regex: '^\.'
+      - regex: '^\?'
+#  ATTRIBUTE_VALUE:
+#    regex: ^\$\{.*\}
+# regex: '^"'

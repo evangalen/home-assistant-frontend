@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: search-boolean-props-without-dot
+language: ts
+severity: hint
+rule:
+  kind: string_fragment
+  pattern: $STRING_FRAGMENT
+  precedes:
+    kind: template_substitution
+  inside:
+    kind: template_string
+    inside:
+      kind: call_expression
+      has:
+        kind: identifier
+        regex: ^html$
+constraints:
+  STRING_FRAGMENT:
+    regex: \s+\.
+    any:
+      - regex: <\w+\s
+      - follows:
+          stopBy: end
+          kind: string_fragment
+          regex: <\w+\s

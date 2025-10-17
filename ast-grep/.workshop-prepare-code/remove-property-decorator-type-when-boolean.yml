@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: remove-property-decorator-type-when-boolean
+language: ts
+files:
+  - src/panels/logbook/ha-logbook-renderer.ts
+  - src/state-display/state-display.ts
+  - src/components/ha-selector/ha-selector-date.ts
+  - src/components/ha-selector/ha-selector-area.ts
+  - src/onboarding/integration-badge.ts
+  - src/components/chart/state-history-charts.ts
+
+rule:
+  pattern:
+    context: |
+      { type: $_ }
+    selector: pair
+  inside:
+    stopBy: end
+    pattern: |
+      @property($OPTIONS_OBJECT)
+    inside:
+      kind: public_field_definition
+      any:
+        - has: # has `: boolean` type annotation
+            field: type
+            has: { kind: predefined_type, regex: ^boolean$ }
+        - has: # has `= true` or `= false`
+            field: value
+            regex: ^(true|false)$
+
+constraints:
+  OPTIONS_OBJECT:
+    has:
+      kind: pair
+      nthChild: 2
+
+fix:
+  template: ""
+  expandEnd: { regex: "," }
+
+---
+id: remove-property-decorator-type-when-boolean-single-pair
+language: ts
+files:
+  - src/panels/logbook/ha-logbook-renderer.ts
+  - src/state-display/state-display.ts
+  - src/components/ha-selector/ha-selector-date.ts
+  - src/components/ha-selector/ha-selector-area.ts
+  - src/onboarding/integration-badge.ts
+  - src/components/chart/state-history-charts.ts
+
+rule:
+  pattern: |
+    @property($OPTIONS_OBJECT)
+  inside:
+    kind: public_field_definition
+    any:
+      - has: # has `: boolean` type annotation
+          field: type
+          has: { kind: predefined_type, regex: ^boolean$ }
+      - has: # has `= true` or `= false`
+          field: value
+          regex: ^(true|false)$
+
+constraints:
+  OPTIONS_OBJECT:
+    has:
+      pattern:
+        context: |
+          { type: $_ }
+        selector: pair
+    not:
+      has:
+        kind: pair
+        nthChild: 2
+
+fix:
+  template: "@property()"

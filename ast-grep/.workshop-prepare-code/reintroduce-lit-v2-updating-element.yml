@@ -1,0 +1,94 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: reintroduce-lit-v2-updating-element__inside-constructor_utility-type
+language: ts
+
+rule:
+  kind: type_identifier
+  regex: ^ReactiveElement$
+  inside:
+    stopBy: end
+    pattern:
+      context: |
+        type _ = Constructor<$$$_>
+      selector: generic_type
+
+fix: "InstanceType<typeof UpdatingElement>"
+
+---
+id: reintroduce-lit-v2-updating-element__identifier
+language: ts
+
+rule:
+  kind: identifier
+  regex: ^ReactiveElement$
+
+fix: "UpdatingElement"
+
+---
+id: reintroduce-lit-v2-updating-element__type_identifier
+language: ts
+
+rule:
+  kind: type_identifier
+  regex: ^ReactiveElement$
+  not:
+    all:
+      - inside:
+          stopBy: end
+          pattern: |
+            import type { $$$_ } from "$_"
+      - inside:
+          stopBy: end
+          pattern: |
+            Constructor<$$$_>
+
+fix: "InstanceType<typeof UpdatingElement>"
+
+---
+id: reintroduce-lit-v2-updating-element__change-import-type-statement-with-only-reactive-element
+language: ts
+
+rule:
+  pattern: |
+    import type { ReactiveElement } from "lit";
+
+fix: |-
+  import { UpdatingElement } from "lit";
+
+---
+id: reintroduce-lit-v2-updating-element__move-reactive-element-from-import-type-statement-to-its-own-import-statement
+language: ts
+
+rule:
+  pattern: |
+    import type { $$$IMPORT_SPECIFIERS } from "lit"
+  has:
+    stopBy: end
+    kind: import_specifier
+    regex: ^ReactiveElement$
+  not:
+    pattern: |
+      import type { ReactiveElement } from "lit";
+
+rewriters:
+  - id: purge-reactive-element-import-specifier
+    rule:
+      kind: import_specifier
+      regex: ^ReactiveElement$
+    fix:
+      template: ""
+      expandEnd:
+        regex: ","
+
+transform:
+  MODIFIED_IMPORT_SPECIFIERS:
+    rewrite:
+      source: $$$IMPORT_SPECIFIERS
+      rewriters:
+        - purge-reactive-element-import-specifier
+
+fix:
+  template: |-
+    import type { $MODIFIED_IMPORT_SPECIFIERS } from "lit";
+    import { UpdatingElement } from "lit"

@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: no-boolean-lit-property-attribute-name
+language: ts
+
+rule:
+  any:
+    - pattern: "@property()"
+    - all:
+        - pattern: "@property({ $$$PAIRS })"
+        - pattern: "@property($PROPERTY_OPTIONS)"
+  inside:
+    kind: public_field_definition
+    any:
+      # has `: boolean` type annotation
+      - has: { field: type, has: { kind: predefined_type, regex: ^boolean$ } }
+      # has `= true` or `= false` value
+      - has: { field: value, regex: ^(true|false)$ }
+
+constraints:
+  PROPERTY_OPTIONS:
+    all:
+      - not: { has: { pattern: { context: "{ type: $_ }", selector: pair } } }
+      - not:
+          {
+            has:
+              { pattern: { context: "{ attribute: false }", selector: pair } },
+          }
+
+transform:
+  MAYBE_COMMA: replace($$$PAIRS, replace='^.+', by=', ')
+
+fix:
+  template: "@property({ type: Boolean$MAYBE_COMMA$$$PAIRS })"

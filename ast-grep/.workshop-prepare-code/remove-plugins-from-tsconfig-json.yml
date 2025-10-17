@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: no-property-decorator-type-boolean
+language: json
+files:
+  - tsconfig.json
+rule:
+  kind: pair
+  has:
+    field: key
+    regex: ^"plugins"$
+fix:
+  template: ","
+  expandStart:
+    regex: ","
+  expandEnd:
+    regex: ","

@@ -20,7 +20,8 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "vitest run --config test/vitest.config.ts",
-    "test:coverage": "vitest run --config test/vitest.config.ts --coverage"
+    "test:coverage": "vitest run --config test/vitest.config.ts --coverage",
+    "pretty-quick": "pretty-quick"
   },
   "author": "Paulus Schoutsen <Paulus@PaulusSchoutsen.nl> (http://paulusschoutsen.nl)",
   "license": "Apache-2.0",
@@ -211,6 +212,7 @@
     "map-stream": "0.0.7",
     "pinst": "3.0.0",
     "prettier": "3.5.3",
+    "pretty-quick": "4.2.2",
     "rspack-manifest-plugin": "5.0.3",
     "serve": "14.2.4",
     "sinon": "21.0.0",

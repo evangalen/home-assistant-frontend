@@ -1,7 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
-
-id: missing-boolean-lit-property-type__non-existing-property-options
+id: missing-boolean-lit-property-type
 language: ts
+severity: error
+message: "Missing `type` property inside options of `@property` decorator of boolean class field."
 rule:
   any:
     - pattern: "@property()"
@@ -20,14 +21,20 @@ fix:
   template: "@property({ type: Boolean })"
 
 ---
-id: missing-boolean-lit-property-type__existing-property-options
+
+id: missing-boolean-lit-property-type
+severity: error
+message: "Missing `type` property inside options of `@property` decorator of boolean class field."
 language: ts
 rule:
   all:
-    - pattern: "@property($PROPERTY_OPTIONS_WITHOUT_TYPE_AND_NO_ATTRIBUTE_FALSE)"
-    - pattern: "@property({ $$$PAIRS })"
+    - pattern: |
+        @property($PROPERTY_OPTIONS)
+    - pattern: |
+        @property({ $$$PAIRS })
     - not: # exclude `@property` with an empty options object, since `$$$PAIRS` can also be empty
-        pattern: "@property({})"
+        pattern: |
+          @property({})
   inside:
     kind: public_field_definition # matches any class field, even those with JS `#` prefix or TS `private` modifier
     any:
@@ -39,14 +46,14 @@ rule:
           regex: ^(true|false)$
 
 constraints:
-  PROPERTY_OPTIONS_WITHOUT_TYPE_AND_NO_ATTRIBUTE_FALSE:
+  PROPERTY_OPTIONS:
     kind: object
     all:
       - not:
-          has: # `type: Boolean` property
+          has: # `type` property with any value
             pattern:
               context: |
-                { type: Boolean }
+                { type: $_ }
               selector: pair
       - not:
           has: # `attribute: false` property

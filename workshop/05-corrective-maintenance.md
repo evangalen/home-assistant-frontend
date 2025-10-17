@@ -3,6 +3,7 @@
 (continues where [04-opengrep-advanced-structural-search.md](./04-opengrep-advanced-structural-search.md) file ended)
 
 ## Corrective Maintenance
+
 Now that we got a basic introduction to both ast-grep and Opengrep, it's time to apply them to a real-world scenario.
 
 Normally, Corrective Maintenance is done by manually fixing code containing bugs.
@@ -12,6 +13,7 @@ Making if much harding to simply trace back your changes using the Git history.
 To learn how ast-grep can be used for Corrective Maintenance, we'll first have to introduce the bug into the code base
 that we use for this workshop.
 And instead of creating a separate branch for this, we'll use ast-grep to introduce the bug 🙈:
+
 ```shell
 ./prep-code-lab-corrective-maintenance.sh
 ```
@@ -25,6 +27,7 @@ For instance, using `required` with **no attribute value** for `ha-selector-date
 instead of the expected `true` boolean.
 
 ### Using ast-grep to search for the bug
+
 To help localize the placed in the code that causes the bug, we could use create an ast-grep search rule to find them.
 And to learn how to create a search rule with ast-grep, we'll build it one from the ground up.
 
@@ -42,6 +45,7 @@ In case of search rules, instead of placing them inside the `./ast-grep/rules` f
 
 Now create a minimal ast-grep YAML file called `find-boolean-lit-property-without-type.yml` inside the
 `./ast-grep/rules/search` folder with the following contents:
+
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 id: find-boolean-lit-property-without-type
@@ -49,13 +53,14 @@ language: ts
 
 rule:
   # ..
-``` 
+```
 
 Every ast-grep YAML rule should always contain the following:
- - a link to the ast-grep YAML schema allowing IDEs and editors to provide auto-completion and validation
- - a `id`; in this case `find-boolean-lit-property-without-type`
- - a `language`; in this case `ts` since we are using TypeScript
- - a `rule` entry
+
+- a link to the ast-grep YAML schema allowing IDEs and editors to provide auto-completion and validation
+- a `id`; in this case `find-boolean-lit-property-without-type`
+- a `language`; in this case `ts` since we are using TypeScript
+- a `rule` entry
 
 Currently, the `rule` entry is empty, which also makes our rule invalid.
 So, let's change our `rule` entry to search for **any** class field:
@@ -75,6 +80,7 @@ like `private`.
 **NOTE**: the confusing name `public_field_definition` kind comes from in the tree sitter grammar for TypeScript.
 
 Now, let's run our search rules:
+
 ```shell
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
@@ -99,13 +105,14 @@ rule:
 [Relational Rules](https://ast-grep.github.io/guide/rule-config/relational-rule.html) of ast-grep.
 
 Now, rerun our search rules:
+
 ```shell
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
 
 Notice now only class fields with an explicitly specified `boolean` type are returned.
 Also notice that besides required fields / properties als optional fields / properties, using `?:` in its type
-annotation, are included in the search results. 
+annotation, are included in the search results.
 
 But, only search for an explicitly specified `boolean` type is not enough.
 We also need to include class fields that have a boolean type inferred from a boolean value.
@@ -143,11 +150,13 @@ rule:
 ```
 
 Re-run our search rule:
+
 ```shell
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
 
 Notice the following class field of `src/panels/config/scene/ha-scene-editor.ts` in now included in the results:
+
 ```ts
 @property({ type: Boolean }) public narrow = false;
 ```
@@ -174,7 +183,7 @@ rule:
   has:
     pattern: |
       @property($PROPERTY_OPTIONS)
-  
+
 constraints:
   PROPERTY_OPTIONS:
     kind: object
@@ -188,7 +197,8 @@ constraints:
 
 Before we'll rerun our search rule, if probably best to do some explaining.
 
-Let's start with the part containing of the `@property($PROPERTY_OPTIONS)` pattern: 
+Let's start with the part containing of the `@property($PROPERTY_OPTIONS)` pattern:
+
 ```yaml
 rule:
   # ..
@@ -205,6 +215,7 @@ To work around, and other restrictions to plain values in YAML, we'll instead us
 information).
 
 Now let's focus on the following part:
+
 ```yaml
 constraints:
   PROPERTY_OPTIONS:
@@ -219,8 +230,9 @@ constraints:
 
 By placing a `constraints` entry next to our `rule` entry, we can apply constraints on one of more meta-variables.
 In this case we specify the following constraints that `PROPERTY_OPTIONS`:
- - must be an object type
- - must have a `type` property with a `Boolean` value
+
+- must be an object type
+- must have a `type` property with a `Boolean` value
 
 Last but not least, notice that we're not directly using the `pattern` entry to specify our code pattern, but instead
 we use a [Pattern Object](https://ast-grep.github.io/guide/rule-config/atomic-rule.html#pattern-object) to specify more
@@ -231,6 +243,7 @@ pattern will be parsed as a (JavaScript) Labeled Statement; see the following as
 https://ast-grep.github.io/playground.html#eyJtb2RlIjoiQ29uZmlnIiwibGFuZyI6InR5cGVzY3JpcHQiLCJxdWVyeSI6IkNvbnN0cnVjdG9yPCQkJF8+IiwicmV3cml0ZSI6IiIsInN0cmljdG5lc3MiOiJhc3QiLCJzZWxlY3RvciI6IiIsImNvbmZpZyI6IiMgeWFtbC1sYW5ndWFnZS1zZXJ2ZXI6ICRzY2hlbWE9aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2FzdC1ncmVwL2FzdC1ncmVwL21haW4vc2NoZW1hcy9ydWxlLmpzb25cblxuaWQ6IGZpbmQtYm9vbGVhbi1saXQtcHJvcGVydHktd2l0aG91dC10eXBlXG5sYW5ndWFnZTogdHNcbnJ1bGU6XG4gIHBhdHRlcm46IHxcbiAgICB0eXBlOiBCb29sZWFuXG4iLCJzb3VyY2UiOiIvLyBMYWJlbGVkIHN0YXRlbWVudCwgd2l0aCBgdHlwZWAgbGFiZWwgYW5kIGBCb29sZWFuYCB2YWx1ZTtcbi8vIHNlZSBhbHNvOiBodHRwczovL2RldmVsb3Blci5tb3ppbGxhLm9yZy9lbi1VUy9kb2NzL1dlYi9KYXZhU2NyaXB0L1JlZmVyZW5jZS9TdGF0ZW1lbnRzL2xhYmVsXG50eXBlOiBCb29sZWFuXG5cbmNsYXNzIENscyB7XG4gIEBwcm9wZXJ0eSh7IHR5cGU6IEJvb2xlYW4gfSkgcHVibGljIG5hcnJvdyA9IGZhbHNlO1xufVxuIn0=
 
 Now let's rerun out search rule:
+
 ```shell
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
@@ -245,6 +258,7 @@ So, we need to ensure that the `@property` does **not** have `attribute: false` 
 
 To combine the previous `not: has:` constraint with an extra `not: has:` constrain we can use the `all` Rational Rule
 to combine this:
+
 ```yaml
 constraints:
   PROPERTY_OPTIONS:
@@ -265,6 +279,7 @@ constraints:
 ```
 
 This changes the contents of our search rule to be:
+
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 
@@ -305,15 +320,17 @@ constraints:
 ```
 
 Let's run the search rule a final time:
+
 ```shell
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
 
 Notice that the `@property` with `attribute: false` are no longer included in the search results 🎉
 
-We are almost done with our search rule, but we still need to also support `@property()` that has no options. 
+We are almost done with our search rule, but we still need to also support `@property()` that has no options.
 To fix this, place an `any` between the `has` and `pattern` entries of `@property($PROPERTY_OPTIONS)` and include an
 extra `@property()` pattern:
+
 ```yaml
 rule:
   # ..
@@ -326,6 +343,7 @@ rule:
 ```
 
 This causes our final search rule to be like this:
+
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 id: find-boolean-lit-property-without-type
@@ -366,11 +384,13 @@ constraints:
 ```
 
 Rerun a final time and notice that also class fields with `@property()` are now included in the search results:
+
 ```shell
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
 
 ### Always prefer off-the-shelf lint rules
+
 As it turns out, writing the ast-grep search rules is totally unnecessary 🤦 ...\
 although it (hopefully) was still lots of fun to create our own search rule 🤓
 
@@ -379,6 +399,7 @@ rule that exactly does the same check 🫣 .\
 And it also comes with lots of other useful lint rules 🙈 .
 
 Let's run lit-analyzer via the "lint:lit" NPM script defined in the `package.json` file:
+
 ```shell
 npm run lint:lit
 ```

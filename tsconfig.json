@@ -34,8 +34,9 @@
           "no-incompatible-type-binding": "off",
           "no-unknown-property": "off",
           "no-unknown-attribute": "off",
-          "no-invalid-css": "off"
-        }
+          "no-invalid-css": "off",
+          "no-unknown-tag-name": "off",
+        },
       }
     ],
     "paths": {

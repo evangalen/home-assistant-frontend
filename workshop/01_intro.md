@@ -33,22 +33,31 @@ And can be like a Swiss army knife for your code.
   that use tree-sitter grammar.
 
 ## Pre-requisites for the workshop
+For workshop expects you to use a Unix-like command-environment like Linux and macOS.
+On Windows using the [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/) is the way to go, although [Git Bash](https://git-scm.com/downloads/win) might also work
+(isn't tested though).
 
-First, install the CLI of the most recent ast-grep version following the [Installation](https://ast-grep.github.io/guide/quick-start.html#installation) instructions on their website.
+The following software should be installed on your machine:
+ - GNU `grep` on macOS (= `ggrep`) than can be installed using the following command:
+   ```shell
+   brew install grep
+   ```
+ - Node v20+, preferable using [Node Version Manager (NVM)](https://github.com/nvm-sh/nvm)
+ - the Yarn package manager; to install Yarn without having to install corepack execute the following commands:
+   ```shell
+   npm install -g yarn
+   yarn set version berry
+   ```
+ - the most recent version of ast-grep; see [Installation](https://ast-grep.github.io/guide/quick-start.html#installation) instructions on their website
+ - the most recent version of Opengrep; see [Installation](https://github.com/opengrep/opengrep?tab=readme-ov-file#installation)
+   instructions in the README.md file of the GitHub repository.
+ - the most recent version of Opengrep Playground; see [Installation](https://github.com/opengrep/opengrep-playground?tab=readme-ov-file#installation)
+   in the README.md file of the GitHub repository.
+ - the LSP4IJ plugin (from RedHat) for JetBrains IDE's; see the [GitHub repository(https://github.com/redhat-developer/lsp4ij)
+   for more information.
 
 **NOTE**: when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** `ast-grep`
 (which is a completely different NPM package last published 8 years ago).
-
-Besides ast-grep make sure to also TODO: pre-requisites for this workshop.
-On macOS make sure that `ggrep` (GNU grep) is installed:
-
-```sh
-brew install grep
-```
-
-And, on Windows make sure that you're using a Unix `sh`-like command like [Git Bash](https://git-scm.com/downloads/win) or `bash` inside the [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/).
-
-TODO: add instructions for installing Node v20, Yarn, Opengrep and Opengrep Playground
 
 ## Code base used during the workshop
 

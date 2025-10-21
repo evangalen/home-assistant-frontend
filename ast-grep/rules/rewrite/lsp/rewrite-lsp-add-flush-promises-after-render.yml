@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to add flush promises after a
+# `render` call.
+id: rewrite-lsp-add-flush-promises-after-render
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  all:
+    - any:
+        - pattern: render($$$ARGS);
+        - pattern: const $RESULT = render($$$ARGS);
+    - kind: expression_statement
+      pattern: $RENDER_STATEMENT
+fix:
+  - title: Append (basic) flush promises after `render` call
+    template: |-
+      $RENDER_STATEMENT
+      await act(() => Promise.resolve());

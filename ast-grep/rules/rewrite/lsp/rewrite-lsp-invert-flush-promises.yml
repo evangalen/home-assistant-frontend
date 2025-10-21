@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to change a
+# `await act(() => Promise.resolve());` statement into a `await act(() => new Promise(resolve => setTimeout(resolve)));`
+# statement.
+id: rewrite-lsp-invert-flush-promises-from-basic-flush-promises
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  pattern: await act(() => Promise.resolve());
+fix:
+  - title: Use advanced flush promises
+    template: await act(() => new Promise(resolve => setTimeout(resolve)));
+
+---
+
+# Rewrite rule that introduces Quick Fix inside your IDE (use LSP server of ast-grep) to change a
+# `await act(() => new Promise(resolve => setTimeout(resolve)));` statement into a `await act(() => Promise.resolve());`
+# statement.
+id: rewrite-lsp-invert-flush-promises-from-advanced-flush-promises
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  pattern: await act(() => new Promise(resolve => setTimeout(resolve)));
+fix:
+  - title: Use basic flush promises
+    template: await act(() => Promise.resolve());

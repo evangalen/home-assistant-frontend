@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to change a synchronous `getBy`..
+# call into an asynchronous `findBy`.. call.
+id: rewrite-lsp-invert-find-by-selector-from-get-by-selector
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  pattern: expect($OBJECT.$GET_BY_SELECTOR($$$SELECTOR_ARGS))
+constraints:
+  GET_BY_SELECTOR:
+    regex: ^getBy[A-Z]
+transform:
+  FIND_BY_SELECTOR:
+    replace:
+      replace: ^get(?<REST>.*)$
+      by: 'find$REST'
+      source: $GET_BY_SELECTOR
+fix:
+  - title: Use asynchronous `findBy`.. selector
+    template: |-
+      expect(await $OBJECT.$FIND_BY_SELECTOR($$$SELECTOR_ARGS))
+
+---
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to change an asynchronous `findBy`..
+# call into a synchronous `getBy`.. call.
+id: rewrite-lsp-invert-find-by-selector-from-find-by-selector
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  pattern: expect(await $OBJECT.$FIND_BY_SELECTOR($$$SELECTOR_ARGS))
+constraints:
+  FIND_BY_SELECTOR:
+    regex: ^findBy[A-Z]
+transform:
+  GET_BY_SELECTOR:
+    replace:
+      replace: ^find(?<REST>.*)$
+      by: 'get$REST'
+      source: $FIND_BY_SELECTOR
+fix:
+  - title: Use synchronous `getBy`.. selector
+    template: |-
+      expect($OBJECT.$GET_BY_SELECTOR($$$SELECTOR_ARGS))

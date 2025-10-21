@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to change a
+# `expect(..).toBeInTheDocument();` statement into a `expect(..).not.toBeInTheDocument();` statement.
+id: rewrite-lsp-invert-expect-to-be-in-the-document-add-not
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  pattern: expect(screen.$GET_BY_SELECTOR($$$SELECTOR_ARGS)).toBeInTheDocument();
+constraints:
+  GET_BY_SELECTOR:
+    regex: ^getBy[A-Z]
+transform:
+  QUERY_BY_SELECTOR:
+    replace:
+      replace: ^get(?<REST>.*)$
+      by: 'query$REST'
+      source: $GET_BY_SELECTOR
+fix:
+  - title: Use `.not.toBeInTheDocument()` matcher with `queryBy`.. selector
+    template: |-
+      expect(screen.$QUERY_BY_SELECTOR($$$SELECTOR_ARGS)).not.toBeInTheDocument();
+
+---
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to change a
+# `expect(..).not.toBeInTheDocument()` statement into a `expect(..).toBeInTheDocument()` statement.
+id: rewrite-lsp-invert-expect-to-be-in-the-document-remove-not
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  pattern: expect(screen.$QUERY_BY_SELECTOR($$$SELECTOR_ARGS)).not.toBeInTheDocument();
+constraints:
+  QUERY_BY_SELECTOR:
+    regex: ^queryBy[A-Z]
+transform:
+  GET_BY_SELECTOR:
+    replace:
+      replace: ^query(?<REST>.*)$
+      by: 'get$REST'
+      source: $QUERY_BY_SELECTOR
+fix:
+  - title: Use `.toBeInTheDocument()` matcher with `getBy`.. selector
+    template: |-
+      expect(screen.$GET_BY_SELECTOR($$$SELECTOR_ARGS)).toBeInTheDocument();

@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+# Rewrite rule introducing a Quick Fix inside your IDE (use LSP server of ast-grep) to add `createWrapper` function for
+# an existing `const wrapper: React.FC<{ children: ReactNode }> = ({ children }) => `.. declaration.
+id: rewrite-lsp-add-create-wrapper-for-existing-wrapper
+language: tsx
+severity: hint
+message: "Quick fix:"
+rule:
+  all:
+    - pattern: |
+        const wrapper: React.FC<{ children: $REACT_NODE_TYPE }> = ({ children }) => $WRAPPER_IMPL;
+      not:
+        inside:
+          stopBy: end
+          pattern: |
+            const createWrapper = ($$$ARGS) => { $$$STATEMENTS };
+    - kind: lexical_declaration
+      pattern: $WRAPPER_STATEMENT
+constraints:
+  REACT_NODE_TYPE:
+    any:
+      - regex: ^ReactNode$
+      - regex: ^React.ReactNode$
+fix:
+  - title: Add `createWrapper` function for existing `wrapper` const
+    template: |-
+      const createWrapper = () => {
+        $WRAPPER_STATEMENT
+
+        return { wrapper };
+      };

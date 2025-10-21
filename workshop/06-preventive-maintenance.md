@@ -2,30 +2,28 @@
 (continues where [05-corrective-maintenance.md](./05-corrective-maintenance.md) file ended)
 
 ## Preventive Maintenance
-Although creating an ast-grep search rule might seem a bit useless in hindsight, it does give us the opportunity to
-improve on the Developer eXperience (DX):
-- lit-analyzer is really slow (especially compared with ast-grep)
-- lit-analyzer does not offer an autofix for their rules
+Although creating an `ast-grep` search rule might seem a bit redundant in hindsight, it gives us an excellent opportunity to improve the **Developer Experience (DX)**:
+- `lit-analyzer` is relatively slow (especially compared with `ast-grep`)
+- `lit-analyzer` doesn’t offer **autofix** support for its rules
 
-So, maybe creating our ast-grep search rule wasn't such a bad idea after all 🤔 .
+So, maybe building our own `ast-grep` rule wasn’t such a bad idea after all 🤔
 
-And even-though our search rule allows us to find all the places in the code that causes the bug, we didn't actually
-fix the bugs due to `type` property missing from a `@property` decorators / annotations
+Even though our search rule helps us **find** all locations missing a `type` property inside a `@property` decorator, it doesn’t yet **fix** them automatically.  
+Let’s perform some **Preventive Maintenance** and convert our search rule into a **lint rule** — complete with autofix support.
 
-So let us do some Preventive Maintenance and change our ast-grep search rule into a lint rule.
-And to spice things up we also throw in an autofix for the lint rule.
+## Creating an ast-grep lint rule
+Since we already have a search rule, turning it into a lint rule takes only a few steps:
+- Use a new `id` and file name (replacing the `find-...` prefix)
+- Add a `message` that describes what went wrong
+- Add a `severity` (e.g., `error` or `warning`)
 
-### Creating an ast-grep lint rule
-Since we already have an ast-grep search rule, changing it into an ast-grep lint rule is little effort:
-- we need to come up with a new `id` and file name for the lint rule to replace the `find-`.. one of the search rule
-- we need to specify a `message` that will be displayed whenever the lint rule fails
-- we need to specify a `severity` like `error` or `warning`
+First, copy the existing search rule:
+```sh
+cp ast-grep/rules/search/find-boolean-lit-property-without-type.yml \
+   ast-grep/rules/lint/missing-boolean-lit-property-type.yml
+```
 
-First copy the `find-boolean-lit-property-without-type.yml` of `ast-grep/rules/search` to `ast-grep/rules/lint` and then
-change the file name to `missing-boolean-lit-property-type.yml`.
-
-Now use another `id` in the new file and also specify a `message` and `severity` :
-
+Then edit the new file:
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 id: missing-boolean-lit-property-type
@@ -37,26 +35,24 @@ rule:
   # ..
 ```
 
-Let's run `ast-grep scan`, but this time **without** specifying the `--rule` option.
-```shell
+Run the rule with:
+```sh
 ast-grep scan ../src
 ```
 
-**NOTE**: through the `sgconfig.yml` file in the root of the repo, ast-grep is configured with an `ruleDirs` array with
-a single entry of `ast-grep/rules/lint`. Therefore, using `ast-grep scan` without specifying the `--rule` option will
-automatically use all the lint rules from the `ast-grep/rules/lint` directory.
+💡 **NOTE** The `sgconfig.yml` in the project root contains a `ruleDirs` entry pointing to `ast-grep/rules/lint`,
+so `ast-grep scan` automatically includes all lint rules when no `--rule` flag is given.
 
-### Creating initial autofix for the lint rule
-To be able to introduce an autofix for the lint rule, we need to change the target AST node of our ast-grep rule.
+✅ *Conclusion:* We’ve defined the basic structure for our lint rule — next we’ll make it actually detect and fix issues.
 
-Since we want to apply an autofix on the decorator of a class field, we need to change our rule to target the
-`decorator` AST node that's a child of the `public_field_definition` AST node.
 
-And, to keep things simple, we split the rule into two rules using the `---` YAML marker to create a multi-document YAML file.
+## Adding an autofix
+To make our lint rule fixable, we need to tell `ast-grep` which AST node should be replaced.
+We’ll target the `decorator` node (the `@property(...)` part) inside a `public_field_definition`.
 
-But, for now let's first focus on the relatively simple part of the lint rule.
+For clarity, we’ll split the YAML into two rules using the `---` document separator.
+Let’s start with the simpler first rule:
 
-Change the contents of the `missing-boolean-lit-property-type.yml` file to be like this:
 ```yaml
 id: missing-boolean-lit-property-type
 language: ts
@@ -81,21 +77,20 @@ fix:
   template: "@property({ type: Boolean })"
 ```
 
-Now, let's run `ast-grep scan` again:
-```shell
+Run the command again:
+```sh
 ast-grep scan ../src
 ```
 
-Notice that ast-grep now shows a diff with the changes from our autofix.
+You’ll see a **diff preview** showing how `ast-grep` would autofix the code.
+We’ll enhance it further before applying those fixes.
 
-For now, we'll not apply to autofix changes suggested by ast-grep, because our lint rule is still half complete.
+✅ *Conclusion:* The rule now identifies `@property()` and `@property({})` decorators and suggests autofixing them.
 
-### Changing lint rule into a multi-document YAML file 
-To also support an autofix for `property` decorators / annotations that have options, we need to change our YAML file into a multi-document YAML file.
 
-For this we need to add a `---` YAML marker after the first rul and then add an extra lint rule after that.
+## Supporting more complex decorators
+To also support decorators **with existing options**, we’ll make the rule multi-document YAML by adding another block below the first:
 
-When also change the target AST node of the second part, the contents of the YAML file would look like this (omitting most of what's before the `---` YAML marker):
 ```yaml
 id: missing-boolean-lit-property-type
 severity: error
@@ -141,41 +136,22 @@ constraints:
               selector: pair
 ```
 
-Now, rerun `ast-grep scan` once again:
-```shell
+Run it again:
+```sh
 ast-grep scan ../src
 ```
 
-Notice that for `@property` without options there isn't an autofix suggested by ast-grep.
-This is because we will have to add one to our lint rule.
+✅ *Conclusion:* This second rule detects missing `type: Boolean` inside decorators that already have other options.
 
-To create a `fix` entry for the second part of our lint rule, we'll need to capture all the existing object pairs
-inside the options (object) of the `@property` decorator / annotation.
-
-To capture (zero or more) object pairs, we use a meta-variable with the `$$$` (triple `$`) prefix:
+## Capturing object pairs for autofix
+Now we’ll capture all key-value pairs inside the decorator options using a meta-variable: `$$$PAIRS`.
 ```yaml
 pattern: |
   @property({ $$$PAIRS })
 ```
 
-Besides the `pattern` entry above, we also still need the existing `pattern` with the `@property($PROPERTY_OPTIONS)`
-code pattern.
+We’ll combine it with the original `@property($PROPERTY_OPTIONS)` pattern using the `all` composite rule:
 
-For this we an `and` entry, of the Composite Rules of ast-grep, to combine the two patterns:
-```yaml
-# ..
-rule:
-  all:
-    - pattern: |
-        @property($PROPERTY_OPTIONS)
-    - pattern: |
-        @property({ $$$PAIRS })
-  inside:
-    # ..
-```
-
-To prevent that the second part of our lint rule also matches `@property({})`, which is already matched by the first
-part of thevYAML file, we need to explicitly exclude:
 ```yaml
 # ..
 rule:
@@ -191,7 +167,7 @@ rule:
     # ..
 ```
 
-Now that we captured the object pairs from the options (object) of the `@property` decorator / annotation, we can
+Now we can build our final autofix for this second rule:
 create a `fix` entry for the **second part** of our lint rule:
 ```yaml
 # ..
@@ -214,8 +190,10 @@ fix:
   template: "@property({ type: Boolean, $$$PAIRS })"
 ```
 
- This makes the contents of the `missing-boolean-lit-property-type.yml` file to be this:
+✅ *Conclusion:* The autofix now merges `type: Boolean` with any existing key-value pairs inside the decorator options.
 
+
+## 🧩 Final combined lint rule
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 id: missing-boolean-lit-property-type
@@ -285,46 +263,50 @@ fix:
   template: "@property({ type: Boolean, $$$PAIRS })"
 ```
 
-Now run our lint rule and notice that our lint rule now also offers autofix suggestions for the second part of our
-lint rule:
-```shell
-ast-grep scan ../src
-```
+✅ *Conclusion:* This final lint rule detects missing `type: Boolean` in all decorator variants and auto-fixes them safely.
 
-### Applying autofix suggestions for the lint rule
-Up until now we never actually applied the autofix suggestions.
-
-To interactively apply autofix-es, ast-grep offers a nice interactive mode enabled using the `--interactive` CLI flag:
-```shell
+## Applying autofix suggestions
+We can now **apply** the autofixes interactively:
+```sh
 ast-grep scan ../src --interactive
 ```
 
-Notice that ast-grep shows something like this:
+Example output:
+
 ```
 ../src/state-display/state-display.ts
 error[missing-boolean-lit-property-type]: Missing `type` property inside options of `@property` decorator of boolean class field.
 @@ -60,7 +60,7 @@
-61 61│ 
-62 62│   @property({ attribute: false }) public name?: string;
-63 63│ 
-64   │-  @property({ attribute: "dash-unavailable" })
-   64│+  @property({ type: Boolean, attribute: "dash-unavailable" })
-65 65│   public dashUnavailable?: boolean;
-66 66│ 
-67 67│   protected createRenderRoot() {
+-  @property({ attribute: "dash-unavailable" })
++  @property({ type: Boolean, attribute: "dash-unavailable" })
 Accept? [y]es/[↵], [n]o, [a]ll, [q]uit, [e]dit
 ```
 
-Using interactive mode, you can choose to selectively apply autofix suggestions, using [y]es and [n]o keys, or you can go yolo and use the [a]ll key to apply all autofix suggestions at once.
+💡 **NOTE**
+You can press **`a`** to apply all autofixes at once, or run:
 
-Since life is so short to selectively apply the autofix suggestions, lets use the [a]ll key to apply all autofix suggestions.
+```sh
+ast-grep scan ../src -U
+```
 
-Besides using `--interactive`, ast-grep also supports the `--update-all` CLI flag, and its shorthand `-U`, to directly
-apply all the autofix suggestions.
+(`-U` is shorthand for `--update-all`).
 
-### Integration ast-grep into your favorite IDE or editor
-TODO:
+✅ *Conclusion:* The autofix workflow makes `ast-grep` not just a search tool, but a powerful code transformation engine.
 
-### lit-analyzer integration in your IDE
-TODO:
-As we've seen in the "Corrective Maintenance" section of this workshop, TODO:
+### 🔧 Integrating ast-grep
+
+> **TODO:** Add setup steps for enabling `ast-grep` lint feedback in VSCode, JetBrains IDEs, or Neovim.
+
+### 💡 Integrating lit-analyzer
+
+> **TODO:** Describe how to install and configure the `lit-analyzer` VSCode extension, and how to run `yarn lint:lit` from your IDE.
+
+## Summary
+* We converted our `ast-grep` search rule into a fully functional lint rule.
+* We added **autofix** support for both empty and configured `@property` decorators.
+* We learned to use `any`, `all`, and `and` composite rules.
+* We practiced using multi-document YAML for complex linting cases.
+* We explored interactive and batch autofix workflows.
+
+✅ *Key takeaway:* `ast-grep` allows you not only to detect but also to **prevent** recurring bugs — an essential part of preventive maintenance.
+

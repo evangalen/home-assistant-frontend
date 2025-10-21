@@ -31,6 +31,7 @@ And can be like a Swiss army knife for your code.
   Both `ast-grep` and Opengrep are polyglot tools.
   While Opengrep supports over 30 languages, `ast-grep` supports over 20 but also has [custom language support](https://ast-grep.github.io/advanced/custom-language.html)
   that use tree-sitter grammar.
+Suggestie: leg hier kort uit wat “tree-sitter grammar” betekent en/of link naar een uitleg zoals https://tree-sitter.github.io/tree-sitter/
 
 ## Pre-requisites for the workshop
 
@@ -52,7 +53,7 @@ TODO: add instructions for installing Node v20, Yarn, Opengrep and Opengrep Play
 
 ## Code base used during the workshop
 
-To use ast-grep and Opengrep on a actual code, this workshop uses a fork from the frontend code base of [Home Assistant](https://www.home-assistant.io/).
+To use ast-grep and Opengrep on an actual codebase, this workshop uses a fork from the frontend code base of [Home Assistant](https://www.home-assistant.io/).
 
 This code base was chosen for this workshop since:
 

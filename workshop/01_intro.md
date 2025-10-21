@@ -28,8 +28,8 @@ And can be like a Swiss army knife for your code.
   you'll learn how to make big changes with confidence.
 
 - **🌐 Speak Every Language**
-  Both `ast-grep` and Opengrep are polyglot tools.
-  While Opengrep supports over 30 languages, `ast-grep` supports over 20 but also has [custom language support](https://ast-grep.github.io/advanced/custom-language.html)
+  Both ast-grep and Opengrep are polyglot tools.
+  While Opengrep supports over 30 languages, ast-grep supports over 20 but also has [custom language support](https://ast-grep.github.io/advanced/custom-language.html)
   that use tree-sitter grammar.
 
 ## Pre-requisites for the workshop
@@ -39,12 +39,12 @@ On Windows using the [Windows Subsystem for Linux (WSL)](https://learn.microsoft
 
 The following software should be installed on your machine:
  - GNU `grep` on macOS (= `ggrep`) than can be installed using the following command:
-   ```shell
+   ```sh
    brew install grep
    ```
  - Node v20+, preferable using [Node Version Manager (NVM)](https://github.com/nvm-sh/nvm)
  - the Yarn package manager; to install Yarn without having to install corepack execute the following commands:
-   ```shell
+   ```sh
    npm install -g yarn
    yarn set version berry
    ```
@@ -56,12 +56,12 @@ The following software should be installed on your machine:
  - the LSP4IJ plugin (from RedHat) for JetBrains IDE's; see the [GitHub repository(https://github.com/redhat-developer/lsp4ij)
    for more information.
 
-**NOTE**: when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** `ast-grep`
+**NOTE**: when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** ast-grep
 (which is a completely different NPM package last published 8 years ago).
 
 ## Code base used during the workshop
 
-To use ast-grep and Opengrep on a actual code, this workshop uses a fork from the frontend code base of [Home Assistant](https://www.home-assistant.io/).
+To use ast-grep and Opengrep on an actual codebase, this workshop uses a fork from the frontend code base of [Home Assistant](https://www.home-assistant.io/).
 
 This code base was chosen for this workshop since:
 

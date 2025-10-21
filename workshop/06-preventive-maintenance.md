@@ -11,7 +11,7 @@ So, maybe building our own ast-grep rule wasn’t such a bad idea after all 🤔
 Even though our search rule helps us **find** all locations missing a `type` property inside a `@property` decorator, it doesn’t yet **fix** them automatically.  
 Let’s perform some **Preventive Maintenance** and convert our search rule into a **lint rule** — complete with autofix support.
 
-## Creating an ast-grep lint rule
+### Creating an ast-grep lint rule
 Since we already have a search rule, turning it into a lint rule takes only a few steps:
 - Use a new `id` and file name (replacing the `find-`.. prefix)
 - Add a `message` that describes what went wrong
@@ -46,7 +46,7 @@ so `ast-grep scan` automatically includes all lint rules when no `--rule` flag i
 ✅ *Conclusion:* We’ve defined the basic structure for our lint rule — next we’ll make it actually detect and fix issues.
 
 
-## Adding an autofix
+### Adding an autofix
 To make our lint rule fixable, we need to tell ast-grep which AST node should be replaced.
 Therefor we'll change our rule to target the `decorator` node (the `@property(...)` part) inside a `public_field_definition`
 instead of targetting the `public_field_definition` AST node
@@ -89,7 +89,7 @@ We’ll enhance it further before applying those fixes.
 ✅ *Conclusion:* The rule now identifies `@property()` and `@property({})` decorators and suggests autofixing them.
 
 
-## Supporting more complex decorators
+### Supporting more complex decorators
 To also support decorators **with existing options**, we’ll make the rule multi-document YAML by adding another block below the first:
 
 ```yaml
@@ -144,7 +144,7 @@ ast-grep scan ../src
 
 ✅ *Conclusion:* This second rule detects missing `type: Boolean` inside decorators that already have other options.
 
-## Capturing object pairs for autofix
+### Capturing object pairs for autofix
 Now we’ll capture all key-value pairs inside the decorator options using a meta-variable: `$$$PAIRS`.
 ```yaml
 pattern: |
@@ -208,7 +208,7 @@ fix:
 ✅ *Conclusion:* The autofix now merges `type: Boolean` with any existing key-value pairs inside the decorator options.
 
 
-## 🧩 Final combined lint rule
+### 🧩 Final combined lint rule
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 id: missing-boolean-lit-property-type
@@ -280,7 +280,7 @@ fix:
 
 ✅ *Conclusion:* This final lint rule detects missing `type: Boolean` in all decorator variants and auto-fixes them safely.
 
-## Applying autofix suggestions
+### Applying autofix suggestions
 We can now **apply** the autofixes interactively:
 ```sh
 ast-grep scan ../src --interactive
@@ -348,7 +348,7 @@ When we ran `./prep-code-lab-corrective-maintenance.sh` to introduce the bugs to
 
 This was done so the errors of lit-analyzer would not confuse you with the errors of ast-grep itself.
 
-## Summary
+### Summary
 * We converted our ast-grep search rule into a fully functional lint rule.
 * We added **autofix** support for both empty and configured `@property` decorators.
 * We learned to use `any`, `all`, and `and` composite rules.
@@ -357,3 +357,5 @@ This was done so the errors of lit-analyzer would not confuse you with the error
 
 ✅ *Key takeaway:* ast-grep allows you not only to detect but also to **prevent** recurring bugs — an essential part of preventive maintenance.
 
+## Adaptive Maintenance
+⏩ View the next file to continue workshop: [07-adaptive-maintenance.md](./07-adaptive-maintenance.md)

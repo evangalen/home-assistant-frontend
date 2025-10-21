@@ -16,7 +16,7 @@ This is called **structural search** and offers a less error-prone alternative t
 - works no matter how your code is formatted (e.g., code divided across multiple lines).
 - always matches the correct closing bracket.
 
-## Searching code using structural search
+### Searching code using structural search
 In this section, we’ll experiment with simple patterns to get a feel for how ast-grep works in practice.
 
 First, make sure the most recent CLI version of ast-grep is installed as explained in the [Installation](https://ast-grep.github.io/guide/quick-start.html#installation) instructions on their website.
@@ -54,7 +54,7 @@ ast-grep --pattern 'console.log($ARG, $ARG)' ../src
 
 Somehow our search for `console.log` calls with two arguments does **not** seem to work 😕
 
-## Introducing meta-variables
+### Introducing meta-variables
 To understand why `ast-grep --pattern 'console.log($ARG, $ARG)'` returns no matches, we must first understand what **meta-variables** are in ast-grep and how they work.
 As you might have guessed, the `$ARG` in our search pattern is a meta-variable.
 
@@ -111,7 +111,7 @@ ast-grep --pattern 'console.log($$$_)'
 
 ✅ *Conclusion:* The triple `$` allows flexible matching for variadic argument lists.
 
-## Quirkyness of structural search in ast-grep
+### Quirkyness of structural search in ast-grep
 Although the structural search of ast-grep is very powerful, it also might behave in unexpected ways.
 This is mostly since structural search in ast-grep does strict matching against the AST tree when using structural search.
 
@@ -139,9 +139,9 @@ ast-grep --pattern 'console.log($FIRST_ARG, $$$REMAINING_ARGS)' --strictness ast
 
 💡 **NOTE** Using strictness other than `smart` is often error-prone and should only be done when you fully understand the consequences.
 
-## Using Playground for a deeper understanding of the AST
+### Using Playground for a deeper understanding of the AST
 
-## Using Playground for a deeper understanding of the CST / AST tree
+### Using Playground for a deeper understanding of the CST / AST tree
 To really understand howvpattern matching in ast-grep behaves, we'll have to use the on-line Playground of ast-grep.
 
 Open the following URL in your favorite web browser:
@@ -198,7 +198,7 @@ Then switch to `ast` strictness — now it **does** match `1 + 2` unexpectedly!
 
 ✅ *Conclusion:* Looser strictness levels may unintentionally match the wrong syntax.
 
-## Accounting for language syntax variations
+### Accounting for language syntax variations
 To match `console.log` calls with one or more arguments, it’s better to explicitly support syntax variations instead of adjusting strictness.
 
 Since the CLI `--pattern` option can’t express multiple alternatives, we’ll use a YAML rule instead.

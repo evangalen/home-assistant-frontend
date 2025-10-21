@@ -26,7 +26,7 @@ For example, using `<ha-selector-date required>` will pass an empty string (`''`
 
 ✅ *Conclusion:* This small change introduces a subtle but realistic type bug we can now detect automatically.
 
-## Using ast-grep to search for the bug
+### Using ast-grep to search for the bug
 To find all places where this bug might occur, we’ll create an ast-grep **search rule** in YAML.
 
 We’ll build the rule step by step — this will help you understand the structure of ast-grep rules from the ground up.
@@ -378,7 +378,7 @@ ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-
 
 ✅ *Conclusion:* The rule correctly identifies Lit `@property` decorators missing a `type`, excluding valid `attribute: false` cases.
 
-## Always prefer off-the-shelf lint rules
+### Always prefer off-the-shelf lint rules
 
 As it turns out, writing this ast-grep rule was technically unnecessary 🤦 — but hopefully it was fun and educational 🤓.
 
@@ -391,4 +391,7 @@ yarn lint:lit
 ```
 
 ✅ *Conclusion:* Custom ast-grep rules are powerful, but off-the-shelf lint rules like `lit-analyzer` can save time and maintenance effort.
+
+## Preventive Maintenance
+⏩ View the next file to continue workshop: [06-preventive-maintenance.md](./06-preventive-maintenance.md)
 

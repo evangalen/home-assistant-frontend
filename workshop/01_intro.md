@@ -12,7 +12,7 @@ In this workshop, you'll learn to wield the powerful tools **[ast-grep](https://
 Both tools are polyglot, supporting either 20+ languages (ast-grep) or 30+ languages (Opengrep).
 And can be like a Swiss army knife for your code.
 
-#### What You'll Learn to Do:
+### What You'll Learn to Do:
 
 - **🔍 Find Anything, Instantly**
   Forget flaky regex! Learn to perform structural searches that understand your code's meaning.
@@ -32,7 +32,7 @@ And can be like a Swiss army knife for your code.
   While Opengrep supports over 30 languages, ast-grep supports over 20 but also has [custom language support](https://ast-grep.github.io/advanced/custom-language.html)
   that use tree-sitter grammar.
 
-## Pre-requisites for the workshop
+### Pre-requisites for the workshop
 For workshop expects you to use a Unix-like command-environment like Linux and macOS.
 On Windows using the [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/) is the way to go, although [Git Bash](https://git-scm.com/downloads/win) might also work
 (isn't tested though).
@@ -59,7 +59,7 @@ The following software should be installed on your machine:
 **NOTE**: when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** ast-grep
 (which is a completely different NPM package last published 8 years ago).
 
-## Code base used during the workshop
+### Code base used during the workshop
 
 To use ast-grep and Opengrep on an actual codebase, this workshop uses a fork from the frontend code base of [Home Assistant](https://www.home-assistant.io/).
 
@@ -71,5 +71,4 @@ This code base was chosen for this workshop since:
   automated refactoring
 
 ## Traditional way of searching code
-
 ⏩ View the next file to continue workshop: [02_traditional_search.md](./02_traditional_search.md)

@@ -24,7 +24,7 @@ Notice that the results of Opengrep also includes `new Set<`..`>()` calls (using
 Given its Static Application Security Testing (SAST) origins, Opengrep (and Semgrep) aims to surface **all relevant patterns**, even if that means broader matches.
 For exploratory or perfective code analysis, this can be very helpful — even if it’s slower.
 
-## Searching for functions with one argument
+### Searching for functions with one argument
 Let’s search for all functions that have exactly one argument:
 ```sh
 opengrep --pattern 'function $FN($ARG)' --lang ts ../src
@@ -40,7 +40,7 @@ The results include:
 
 ✅ *Conclusion:* Opengrep automatically detects a broad range of function-related constructs, not just standalone functions.
 
-## When patterns are missed
+### When patterns are missed
 Although structural search in Opengrep covers many syntax variations, it can still miss certain forms.
 For example, in JavaScript or TypeScript, functions defined via arrow expressions (`const fn = (...) => { ... }`) might not appear in the results.
 
@@ -61,21 +61,21 @@ Notice that `const getCastManager = (auth?: Auth) => { ... }` now appears in the
 **NOTE**: this example is very JavaScript / TypeScript specific and might not be indicative for incomplete search
 results when Opengrep is used for other languages.
 
-## Opengrep Playground
+### Opengrep Playground
 Like ast-grep, Opengrep also includes a Playground — but unlike ast-grep’s web version, it must be installed locally.
 
-### 1. Installation
+#### 1. Installation
 Install the latest Opengrep Playground following the instructions in the README of its GitHub repository:
 👉 [https://github.com/opengrep/opengrep-playground](https://github.com/opengrep/opengrep-playground)
 
-### 2. Launch the Playground
+#### 2. Launch the Playground
 After installation, start it:
 ![](04-opengrep-advanced-structural-search/opengrep-playground-empty.png)
 
-### 3. Add code to test
+#### 3. Add code to test
 Copy the contents of `src/cast/cast_manager.ts` and paste them into the **Code to Test** panel.
 
-### 4. Define a rule
+#### 4. Define a rule
 Paste the following YAML rule into the **Rule** section:
 ```yaml
 rules:
@@ -89,7 +89,7 @@ rules:
 
 💡 **NOTE** The `message` field is required by Opengrep / Semgrep, but since we’re only searching, an empty string is fine.
 
-### 5. Run the rule
+#### 5. Run the rule
 Press **Evaluate** in the top-right corner.
 The results will appear in the **Results** section.
 
@@ -118,7 +118,7 @@ Now press **Evaluate** again — the `const getCastManager = (auth?: Auth) => { 
 
 ✅ *Conclusion:* Using `pattern-either` ensures your rule covers multiple syntactic variants without duplicating logic.
 
-## Summary
+### Summary
 * Opengrep’s structural search is broader and more inclusive than ast-grep’s.
 * It’s ideal for discovering diverse syntax structures across large codebases.
 * Use the Playground to test and refine your rules.

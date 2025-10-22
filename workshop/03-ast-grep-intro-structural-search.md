@@ -88,7 +88,7 @@ ast-grep --pattern 'console.log($_ARG, $_ARG)' ../src
 
 Or skip the name altogether:
 ```sh
-ast-grep --pattern 'console.log($_, $_)'
+ast-grep --pattern 'console.log($_, $_)' ../src
 ```
 
 💡 **NOTE** the syntax in Opengrep, that we'll use later in this workshop, for a (single) meta-variable is exactly the
@@ -101,12 +101,12 @@ The `console.log` function is called with a variable number of arguments in our 
 
 Therefore, we need to use `$$$` (triple) expando characters so ast-grep matches against **zero or more** unnamed and named AST nodes:
 ```sh
-ast-grep --pattern 'console.log($$$ARGS)'
+ast-grep --pattern 'console.log($$$ARGS)' ../src
 ```
 
 You can also skip the name entirely:
 ```sh
-ast-grep --pattern 'console.log($$$_)'
+ast-grep --pattern 'console.log($$$_)' ../src
 ```
 
 ✅ *Conclusion:* The triple `$` allows flexible matching for variadic argument lists.
@@ -145,7 +145,7 @@ ast-grep --pattern 'console.log($FIRST_ARG, $$$REMAINING_ARGS)' --strictness ast
 To really understand howvpattern matching in ast-grep behaves, we'll have to use the on-line Playground of ast-grep.
 
 Open the following URL in your favorite web browser:
-https://ast-grep.github.io/playground.html#eyJtb2RlIjoiUGF0Y2giLCJsYW5nIjoidHlwZXNjcmlwdCIsInF1ZXJ5IjoiY29uc29sZS5sb2coJEZJUlNUX0FSRywgJCQkUkVNQUlOSU5HX0FSR1MpIiwicmV3cml0ZSI6IiIsInN0cmljdG5lc3MiOiJyZWxheGVkIiwic2VsZWN0b3IiOiIiLCJjb25maWciOiIjIHlhbWwtbGFuZ3VhZ2Utc2VydmVyOiAkc2NoZW1hPWh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9hc3QtZ3JlcC9hc3QtZ3JlcC9tYWluL3NjaGVtYXMvcnVsZS5qc29uXG5cbmlkOiBzZWFyY2gtY29uc29sZS1sb2dcbmxhbmd1YWdlOiB0c1xucnVsZTpcbiAgcGF0dGVybjogY29uc29sZS5sb2coJEZJUlNUX0FSRywgJCQkUkVNQUlOSU5HX0FSR1MpXG4iLCJzb3VyY2UiOiJjb25zb2xlLmxvZyhlcnIpO1xuXG4xICsgMjsifQ==
+https://ast-grep.github.io/playground.html#eyJtb2RlIjoiUGF0Y2giLCJsYW5nIjoidHlwZXNjcmlwdCIsInF1ZXJ5IjoiY29uc29sZS5sb2coJEZJUlNUX0FSRywgJCQkUkVNQUlOSU5HX0FSR1MpIiwicmV3cml0ZSI6IiIsInN0cmljdG5lc3MiOiJzbWFydCIsInNlbGVjdG9yIjoiIiwiY29uZmlnIjoiIyB5YW1sLWxhbmd1YWdlLXNlcnZlcjogJHNjaGVtYT1odHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vYXN0LWdyZXAvYXN0LWdyZXAvbWFpbi9zY2hlbWFzL3J1bGUuanNvblxuXG5pZDogc2VhcmNoLWNvbnNvbGUtbG9nXG5sYW5ndWFnZTogdHNcbnJ1bGU6XG4gIHBhdHRlcm46IGNvbnNvbGUubG9nKCRGSVJTVF9BUkcsICQkJFJFTUFJTklOR19BUkdTKVxuIiwic291cmNlIjoiY29uc29sZS5sb2coZXJyKTtcblxuMSArIDI7In0=
 
 Notice the pattern `console.log($FIRST_ARG, $$$REMAINING_ARGS)` in the top-right of the Playground and the sample code on the left:
 ![](03-ast-grep-intro-structural-search/ast-grep-playground-console-log-one-arg.png)

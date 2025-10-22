@@ -77,7 +77,7 @@ Turns out that using non-gready matching did **not** complety fix our closing `)
 Have a look at the matches of the `src/common/string/filter/filter.ts` file and notice the matches ends too early using
 the closing bracket of the nested `printTable(`..`)` call.
 
-So at it turns out non-greedy matching is not enough to fix our regex 😿
+As it turns out, non-greedy matching is not enough to fix our regex 😿
 
 🧩 Even non-greedy regex fails reliably at scale (nested calls, mixed formatting).
 For systematic code search, we need a syntax-aware approach.

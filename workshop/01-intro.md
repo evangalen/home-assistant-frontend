@@ -53,7 +53,8 @@ The following software should be installed on your machine:
    instructions in the README.md file of the GitHub repository.
  - the most recent version of Opengrep Playground; see [Installation](https://github.com/opengrep/opengrep-playground?tab=readme-ov-file#installation)
    in the README.md file of the GitHub repository.
- - the LSP4IJ plugin (from RedHat) for JetBrains IDE's; see the [GitHub repository(https://github.com/redhat-developer/lsp4ij)
+ - [ast-grep VSCode](https://marketplace.visualstudio.com/items?itemName=ast-grep.ast-grep-vscode) extension
+ - JetBrains IDE's: the LSP4IJ plugin (from RedHat); see the [GitHub repository(https://github.com/redhat-developer/lsp4ij)
    for more information.
 
 💡 **NOTE** when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** ast-grep

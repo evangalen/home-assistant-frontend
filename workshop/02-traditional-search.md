@@ -1,5 +1,5 @@
 # Workshop: Taking back control of your code
-(continues where [01_intro.md](./01_intro.md) file ended)
+(continues where [01_intro.md](01-intro.md) file ended)
 
 ## Traditional way of searching code
 
@@ -87,4 +87,4 @@ Across these experiments, grep/regex showed speed but no structural understandin
 That’s the core limitation we’ll address next with AST-based search using ast-grep.
 
 ## Introducing structural search with ast-grep
-⏩ View the next file to continue workshop: [02_traditional_search.md](./02_traditional_search.md)
+⏩ View the next file to continue workshop: [03-ast-grep-intro-structural-search.md](./03-ast-grep-intro-structural-search.md)

@@ -71,4 +71,4 @@ This code base was chosen for this workshop since:
   automated refactoring
 
 ## Traditional way of searching code
-⏩ View the next file to continue workshop: [02_traditional_search.md](./02_traditional_search.md)
+⏩ View the next file to continue workshop: [02-traditional-search.md](./02-traditional-search.md)

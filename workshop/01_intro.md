@@ -56,7 +56,7 @@ The following software should be installed on your machine:
  - the LSP4IJ plugin (from RedHat) for JetBrains IDE's; see the [GitHub repository(https://github.com/redhat-developer/lsp4ij)
    for more information.
 
-**NOTE**: when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** ast-grep
+💡 **NOTE** when installing ast-grep using NPM be sure to do a `npm install` of `@ast-grep/cli` and **not** ast-grep
 (which is a completely different NPM package last published 8 years ago).
 
 ### Code base used during the workshop

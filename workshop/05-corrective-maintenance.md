@@ -93,28 +93,28 @@ rule:
     has: { kind: predefined_type, regex: ^boolean$ }
 ```
 
-Using the `has` Relational Rule of ast-grep we specify that the class field, specified using `kind: public_field_definition`,  has a predefined type of `boolean`.
+Using the `has` entry we specify that the class field, matched using `kind: public_field_definition`, has a predefined
+type of `boolean`.
 
-TODO: add screenshot of the AST (or CST) of a boolean class field
-
-**NOTE**: the `has` entry, as well as `inside`, `following` and `precedes`, are part of the
-[Relational Rules](https://ast-grep.github.io/guide/rule-config/relational-rule.html) from ast-grep.
+💡 **NOTE** the `has`, as well as `inside`, `following` and `precedes`, are part of the [Relational Rules](https://ast-grep.github.io/guide/rule-config/relational-rule.html) from
+ast-grep.
 
 To specify which name / identifier / text ast-grep must match, it uses regular expressions (regex).
 
-Typically in ast-grep, a regex is only used for a leaf AST node (e.g., `string_fragment`) or a parent AST node with single leaf AST node (e.g., `string` AST node with `string_fragment` inside).
+Typically in ast-grep, a regex is only used for a leaf AST node (e.g., `string_fragment`) or a parent AST node with
+single leaf AST node (e.g., `string` AST node with `string_fragment` inside).
 
 Often the regex used in an ast-grep rule is only the literal text that needs to be matched, which in this case is text `boolean`.
-Besides thay a regex is often prefixed with `^` and postfixed with `$` to ensure the regex matches the complete name / identifier / text of de AST node.
+Besides that, a regex is often pre-fixed with `^` and post-fixed with `$` to ensure the regex matches the complete name / identifier / text of de AST node.
 
-**NOTE**: regex in ast-grep uses the limited  Rust flavour of regex, lacking features like back references and look arounds that you find in other modern regex implementations like Java, JavaScript, Kotlin and Python.
+💡 **NOTE** regex in ast-grep uses the limited Rust flavour of regex, lacking features like back references and look arounds that you find in other modern regex implementations like Java, JavaScript, Kotlin and Python.
 
 Last but not least... notice the `has` entry uses a `field` property (instead of a `kind` property).
 A `field` specifies the field name of a parent-child relation between a parent AST node and a child AST node.
-In this case the `public_field_definition` AST node has a child AST node that can addresed using `field: type` .
-More info about fields van be found in de [Kind vs Field](https://ast-grep.github.io/advanced/core-concepts.html#kind-vs-field) section of the ast-grep documentation.
+In this case the `public_field_definition` AST node has a child AST node that can addressed using `field: type` .
+More info about fields can be found in the [Kind vs Field](https://ast-grep.github.io/advanced/core-concepts.html#kind-vs-field) section of the ast-grep documentation.
 
-Now, lets rerun our search rule:
+Now, let's rerun our search rule:
 ```sh
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
@@ -205,8 +205,8 @@ rule:
 ```
 
 Notice the `|` and the fact that the actual pattern value is placed on the next line.
-Ideally you would like to use a plain value in YAML to specify an ast-grep pattern.
-But, there are restrictions to using plain values in YAML.
+Ideally, you would like to use a plain value in YAML to specify an ast-grep pattern.
+But there are restrictions to using plain values in YAML.
 Like that a plain value cannot start with a reserved character like `@`.
 
 To work around this, and other restrictions of plain values in YAML, we instead use `|` to create a literal block (see
@@ -225,20 +225,23 @@ constraints:
           selector: pair
 ```
 
-By placing a `constraints` entry next to our `rule` entry, we can apply constraints to one of more meta-variables.
+By placing a `constraints` entry next to our `rule` entry, we can apply constraints to one of more meta-variables.\
 In this case we specify the following constraints for `PROPERTY_OPTIONS`:
 - it must be an object type
-- containing a `type` property
+- it most contain a `type` property
 
-Last but not least, notice that we not directly using the `pattern` entry to specify our code pattern, but use a [Pattern Object](https://ast-grep.github.io/guide/rule-config/atomic-rule.html#pattern-object) to specify more context for our code pattern with an additionally `selector` to only keep the `pair` node.
-This is neccesary, because when directly using `type: Boolean` as a `pattern` entry, the pattern will be parsed as a (JavaScript) Labeled Statement; also see  [ast-grep Playground](https://ast-grep.github.io/playground.html#eyJtb2RlIjoiQ29uZmlnIiwibGFuZyI6InR5cGVzY3JpcHQiLCJxdWVyeSI6IkNvbnN0cnVjdG9yPCQkJF8+IiwicmV3cml0ZSI6IiIsInN0cmljdG5lc3MiOiJhc3QiLCJzZWxlY3RvciI6IiIsImNvbmZpZyI6IiMgeWFtbC1sYW5ndWFnZS1zZXJ2ZXI6ICRzY2hlbWE9aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2FzdC1ncmVwL2FzdC1ncmVwL21haW4vc2NoZW1hcy9ydWxlLmpzb25cblxuaWQ6IGZpbmQtYm9vbGVhbi1saXQtcHJvcGVydHktd2l0aG91dC10eXBlXG5sYW5ndWFnZTogdHNcbnJ1bGU6XG4gIHBhdHRlcm46IHxcbiAgICB0eXBlOiBCb29sZWFuXG4iLCJzb3VyY2UiOiIvLyBMYWJlbGVkIHN0YXRlbWVudCwgd2l0aCBgdHlwZWAgbGFiZWwgYW5kIGBCb29sZWFuYCB2YWx1ZTtcbi8vIHNlZSBhbHNvOiBodHRwczovL2RldmVsb3Blci5tb3ppbGxhLm9yZy9lbi1VUy9kb2NzL1dlYi9KYXZhU2NyaXB0L1JlZmVyZW5jZS9TdGF0ZW1lbnRzL2xhYmVsXG50eXBlOiBCb29sZWFuXG5cbmNsYXNzIENscyB7XG4gIEBwcm9wZXJ0eSh7IHR5cGU6IEJvb2xlYW4gfSkgcHVibGljIG5hcnJvdyA9IGZhbHNlO1xufVxuIn0=) .
+Last but not least, notice that we are not directly using the `pattern` entry to specify our code pattern.
+Instead, we use a [Pattern Object](https://ast-grep.github.io/guide/rule-config/atomic-rule.html#pattern-object) to specify more context for our code pattern with an additionally `selector` to
+only keep the `pair` node.
+This is necessary, because when directly using `type: Boolean` as a `pattern` entry, the pattern will be parsed as a
+(JavaScript) Labeled Statement; also see [example in ast-grep Playground](https://ast-grep.github.io/playground.html#eyJtb2RlIjoiQ29uZmlnIiwibGFuZyI6InR5cGVzY3JpcHQiLCJxdWVyeSI6IkNvbnN0cnVjdG9yPCQkJF8+IiwicmV3cml0ZSI6IiIsInN0cmljdG5lc3MiOiJhc3QiLCJzZWxlY3RvciI6IiIsImNvbmZpZyI6IiMgeWFtbC1sYW5ndWFnZS1zZXJ2ZXI6ICRzY2hlbWE9aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2FzdC1ncmVwL2FzdC1ncmVwL21haW4vc2NoZW1hcy9ydWxlLmpzb25cblxuaWQ6IGZpbmQtYm9vbGVhbi1saXQtcHJvcGVydHktd2l0aG91dC10eXBlXG5sYW5ndWFnZTogdHNcbnJ1bGU6XG4gIHBhdHRlcm46IHxcbiAgICB0eXBlOiBCb29sZWFuXG4iLCJzb3VyY2UiOiIvLyBMYWJlbGVkIHN0YXRlbWVudCwgd2l0aCBgdHlwZWAgbGFiZWwgYW5kIGBCb29sZWFuYCB2YWx1ZTtcbi8vIHNlZSBhbHNvOiBodHRwczovL2RldmVsb3Blci5tb3ppbGxhLm9yZy9lbi1VUy9kb2NzL1dlYi9KYXZhU2NyaXB0L1JlZmVyZW5jZS9TdGF0ZW1lbnRzL2xhYmVsXG50eXBlOiBCb29sZWFuXG5cbmNsYXNzIENscyB7XG4gIEBwcm9wZXJ0eSh7IHR5cGU6IEJvb2xlYW4gfSkgcHVibGljIG5hcnJvdyA9IGZhbHNlO1xufVxuIn0=) .
 
 Now let's rerun out search rule:
 ```sh
 ast-grep scan --rule ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml ../src
 ```
 
-Notice that the shown `@property` no longer includes decorators / annotations other than `@property` and that only
+Notice that the shown `@property` no longer includes decorators / annotations other than `@property` and that only 
 `@property` are included without a `type` property.
 
 But notice that `@property` with `attribute: false` are still included.

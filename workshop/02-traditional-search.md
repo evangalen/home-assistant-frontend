@@ -6,7 +6,7 @@
 Before we start using ast-grep, it's also good to experience the traditional way of searching code and its pain-points.\
 For the traditional experience we'll be using Unix `grep`.
 
-**NOTE**: Alternatively, you could also do the `grep` / `./regex-search.sh` exercises below using your IDE's search features.
+💡 **NOTE** Alternatively, you could also do the `grep` / `./regex-search.sh` exercises below using your IDE's search features.
 
 To exercise searching code, we'll search for JavaScript `console.log` which is typically undesired,
 since it clutters up the JavaScript console with logging in your browser.
@@ -16,7 +16,7 @@ since it clutters up the JavaScript console with logging in your browser.
 grep -r 'console.log' ../src
 ```
 
-**NOTE**: during the workshop the current working directory in your command-line is expected to be `./workshop`.
+💡 **NOTE** during the workshop the current working directory in your command-line is expected to be `./workshop`.
 That's why we use `../src` (as opposed to `src`) at the end of every `grep`, `regex-search.sh`, `ast-grep` and `opengrep` command in the workshop material.
 
 Notice that some of the `console.log` calls are placed on multiple lines like in the `src/common/image/extract_color.ts` file.
@@ -51,7 +51,7 @@ To make the regex also match newlines, we have to slightly change our regex.
 ./regex-search.sh 'console.log\((.|\n)*\)' ../src/common/image/extract_color.ts
 ```
 
-**NOTE**: the `regex-search.sh` script uses the `-z` CLI flag of `grep` / `ggrep` so the regex can use `\n` to match newlines.
+💡 **NOTE** the `regex-search.sh` script uses the `-z` CLI flag of `grep` / `ggrep` so the regex can use `\n` to match newlines.
 
 Jikes, the regex matching no longer stops are the closing `)` bracket but instead matches until the last `)` in the file 😱
 Also notice that now the complete contents of the file is shown instead of only what is matched 😵‍💫

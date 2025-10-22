@@ -91,7 +91,7 @@ Or skip the name altogether:
 ast-grep --pattern 'console.log($_, $_)'
 ```
 
-**NOTE**: the syntax in Opengrep, that we'll use later in this workshop, for a (single) meta-variable is exactly the
+💡 **NOTE** the syntax in Opengrep, that we'll use later in this workshop, for a (single) meta-variable is exactly the
 same as the syntax in ast-grep, **except** for `$_ARG` that in Opengrep is
 [**not anonymous**](https://semgrep.dev/docs/writing-rules/pattern-syntax#anonymous-metavariables) and therefore does
 capture its AST node.
@@ -170,7 +170,7 @@ To understand why:
 - hover over `expression_statement` and notice that the `;` is actually part of the `expression_statement` AST node,
   and not part of the `call_expression` AST node.
 
-**NOTE**: in JavaScript / TypeScript, the `;` is optional for a statement and therefore can be omitted.
+💡 **NOTE** in JavaScript / TypeScript, the `;` is optional for a statement and therefore can be omitted.
 
 There are 2 ways to deal with the trailing `;` in the code:
 1.  append `;` after the `console.log($FIRST_ARG, $$$REMAINING_ARGS)` pattern in the top right of the Playground
@@ -184,7 +184,7 @@ In practice, I prefer to use option 1 **when** `;` usage is required and enforce
 
 Otherwise, I tend to go for option 2 and simply accept it the way it is.
 
-**NOTE**: when rewriting code as part of a (auto) fix you can use `expandEnd: { regex: ';' }` in the `fix` object of
+💡 **NOTE** when rewriting code as part of a (auto) fix you can use `expandEnd: { regex: ';' }` in the `fix` object of
 your ast-grep YAML rule to expand the range of the to be replaced code to include the trailing `;`.
 
 ## Fiddling with strictness is not the answer

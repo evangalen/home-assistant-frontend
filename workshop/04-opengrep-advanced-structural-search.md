@@ -58,7 +58,7 @@ Notice that `const getCastManager = (auth?: Auth) => { ... }` now appears in the
 
 ✅ *Conclusion:* Opengrep’s default patterns may miss arrow-function variations; supplementing with broader patterns solves this.
 
-**NOTE**: this example is very JavaScript / TypeScript specific and might not be indicative for incomplete search
+💡 **NOTE** this example is very JavaScript / TypeScript specific and might not be indicative for incomplete search
 results when Opengrep is used for other languages.
 
 ### Opengrep Playground

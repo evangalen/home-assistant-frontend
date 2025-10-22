@@ -7,7 +7,7 @@ During the workshop, and later on, the following resources might be useful:
  - [ast-grep website](https://ast-grep.github.io/), containing:
     - [Guide](https://ast-grep.github.io/guide/introduction.html)
     - [Rule Cheat Sheet](https://ast-grep.github.io/cheatsheet/rule.html)
-    - [Rule Config reference][https://ast-grep.github.io/reference/yaml.html#configuration-reference]
+    - [Rule Config reference](https://ast-grep.github.io/reference/yaml.html#configuration-reference)
     - [Rule Object Reference](https://ast-grep.github.io/reference/rule.html) containing information about
       [Atomic Rules](https://ast-grep.github.io/reference/rule.html#atomic-rules),
       [Relational Rules](https://ast-grep.github.io/reference/rule.html#relational-rules) and
@@ -21,9 +21,10 @@ During the workshop, and later on, the following resources might be useful:
     - [Introducing jssg: a next-gen, multi-language codemod toolkit](https://codemod.com/blog/jssg):
       blog about the new JavaScript ast-grep (jssg) runtime for code migrations from codemod.com
     - [Docs of JavaScript ast-grep (jssg) runtime](https://docs.codemod.com/jssg)
- - OpenGrep (fork of Semgrep):
-    - [OpenGrep GitHub repo](https://github.com/opengrep/opengrep)
-    - [Opengrep Rules (a fork of Semgrep Rules)](https://github.com/opengrep/opengrep-rules): the SAST rules from
-      OpenGrep   
+ - Opengrep (fork of Semgrep):
+    - [Opengrep GitHub repo](https://github.com/opengrep/opengrep)
+    - [Opengrep Playground GitHub repo](https://github.com/opengrep/opengrep-playground)
+    - [Opengrep Rules (a fork of Semgrep Rules)](https://github.com/opengrep/opengrep-rules):
+      the Static Application Security Testing (SAST) rules from OpenGrep   
  - Semgrep documentation, containing:
     - [Write rules for Semgrep Code](https://semgrep.dev/docs/writing-rules/overview) (is also applicable for Opengrep)

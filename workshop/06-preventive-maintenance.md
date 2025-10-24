@@ -19,8 +19,8 @@ Since we already have a search rule, turning it into a lint rule takes only a fe
 
 First, copy the existing search rule:
 ```sh
-cp ast-grep/rules/search/find-boolean-lit-property-without-type.yml \
-   ast-grep/rules/lint/missing-boolean-lit-property-type.yml
+cp ../ast-grep/rules/search/find-boolean-lit-property-without-type.yml \
+   ../ast-grep/rules/lint/missing-boolean-lit-property-type.yml
 ```
 
 Then edit the new file:
@@ -52,8 +52,14 @@ Therefor we'll change our rule to target the `decorator` node (the `@property(..
 instead of targetting the `public_field_definition` AST node
 
 For clarity, we’ll split the YAML into two rules using the `---` document separator.
-Let’s start with the simpler first rule that replaces the earlier copy rule:
 
+Let’s start by removing the earlier copied YAML file and then create a new one:
+```sh
+rm ../ast-grep/rules/lint/missing-boolean-lit-property-type.yml
+touch ../ast-grep/rules/lint/missing-boolean-lit-property-type.yml 
+```
+
+Now add the following content to the newly created `missing-boolean-lit-property-type.yml` file:
 ```yaml
 id: missing-boolean-lit-property-type
 language: ts
@@ -87,7 +93,6 @@ You’ll see a **diff preview** showing how ast-grep would autofix the code.
 We’ll enhance it further before applying those fixes.
 
 ✅ *Conclusion:* The rule now identifies `@property()` and `@property({})` decorators and suggests autofixing them.
-
 
 ### Supporting more complex decorators
 To also support decorators **with existing options**, we’ll make the rule multi-document YAML by adding another block below the first:

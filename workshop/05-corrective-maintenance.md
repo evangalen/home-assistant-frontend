@@ -35,7 +35,7 @@ Our goal:
 Find all boolean class fields that have a `@property` decorator but **no explicit `type` property**.
 
 ### Step 1: Create the rule file
-Let’s create a minimal ast-grep YAML file **a rule** inside `./ast-grep/rules/search/find-boolean-lit-property-without-type.yml`:
+Let’s create a minimal ast-grep YAML file **a rule** inside `../ast-grep/rules/search/find-boolean-lit-property-without-type.yml`:
 
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json

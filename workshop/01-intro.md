@@ -47,10 +47,13 @@ The following software should be installed on your machine:
    ```sh
    npm install -g yarn
    yarn set version berry
+   yarn install
    ```
  - the most recent version of ast-grep; see [Installation](https://ast-grep.github.io/guide/quick-start.html#installation) instructions on their website
  - the most recent version of Opengrep; see [Installation](https://github.com/opengrep/opengrep?tab=readme-ov-file#installation)
    instructions in the README.md file of the GitHub repository.
+    - alternatively, you can use [asdf-opengrep](https://github.com/hueys/asdf-opengrep) plugin for
+      [asdf](https://github.com/asdf-vm/asdf) version manager.
  - the most recent version of Opengrep Playground; see [Installation](https://github.com/opengrep/opengrep-playground?tab=readme-ov-file#installation)
    in the README.md file of the GitHub repository.
  - [ast-grep VSCode](https://marketplace.visualstudio.com/items?itemName=ast-grep.ast-grep-vscode) extension

@@ -8,8 +8,8 @@ previous v2 major version of Lit:
 ./prep-code-lab-adaptive-maintenance.sh
 ```
 
-With Lit v3 the `UpdatingElement` is removed a (finally) replaced with `ReactiveElement`;
-see the [Lit 3 upgrade guide](https://lit.dev/docs/releases/upgrade/#removed-updating-element) for more details.
+With Lit v3 the `UpdatingElement` is removed and is (finally) replaced with `ReactiveElement`;
+see [Lit 3 upgrade guide](https://lit.dev/docs/releases/upgrade/#removed-updating-element) for more details.
 
 ### Searching for usages of `UpdatingElement`
 As it turns out, ast-grep is quite effective in searching for usages of `UpdatingElement`:
@@ -45,7 +45,7 @@ Choose `a` to accept all the proposed changes.
 ### Migrated Lit version back to v3
 To migrate back the Lit version back to v3 execute the following script:
 ```sh
-rewrite-lit-deps-to-v3.sh
+./rewrite-lit-deps-to-v3.sh
 ```
 
 ### Check you Git changes for `src`
@@ -74,3 +74,5 @@ And for Java and Kotlin (and others) there are the [OpenRewrite Recipes](https:/
 💡 **NOTE** codemod.io nowadays uses ast-grep under the hood, and it offers an on-line Studio that's similar to the
 ast-grep Playground, but also offers additional features like an AI to help you writing the ast-grep rules.
 
+## Perfective Maintenance
+⏩ View the next file to continue workshop: [08-perfective-maintenance.md](./08-perfective-maintenance.md)

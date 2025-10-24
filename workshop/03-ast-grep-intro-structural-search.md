@@ -142,7 +142,7 @@ ast-grep --pattern 'console.log($FIRST_ARG, $$$REMAINING_ARGS)' --strictness ast
 ### Using Playground for a deeper understanding of the AST
 
 ### Using Playground for a deeper understanding of the CST / AST tree
-To really understand howvpattern matching in ast-grep behaves, we'll have to use the on-line Playground of ast-grep.
+To really understand how structural search using a pattern behaves, we'll have to use the on-line Playground of ast-grep.
 
 Open the following URL in your favorite web browser:
 https://ast-grep.github.io/playground.html#eyJtb2RlIjoiUGF0Y2giLCJsYW5nIjoidHlwZXNjcmlwdCIsInF1ZXJ5IjoiY29uc29sZS5sb2coJEZJUlNUX0FSRywgJCQkUkVNQUlOSU5HX0FSR1MpIiwicmV3cml0ZSI6IiIsInN0cmljdG5lc3MiOiJzbWFydCIsInNlbGVjdG9yIjoiIiwiY29uZmlnIjoiIyB5YW1sLWxhbmd1YWdlLXNlcnZlcjogJHNjaGVtYT1odHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vYXN0LWdyZXAvYXN0LWdyZXAvbWFpbi9zY2hlbWFzL3J1bGUuanNvblxuXG5pZDogc2VhcmNoLWNvbnNvbGUtbG9nXG5sYW5ndWFnZTogdHNcbnJ1bGU6XG4gIHBhdHRlcm46IGNvbnNvbGUubG9nKCRGSVJTVF9BUkcsICQkJFJFTUFJTklOR19BUkdTKVxuIiwic291cmNlIjoiY29uc29sZS5sb2coZXJyKTtcblxuMSArIDI7In0=
@@ -172,9 +172,9 @@ To understand why:
 
 💡 **NOTE** in JavaScript / TypeScript, the `;` is optional for a statement and therefore can be omitted.
 
-There are 2 ways to deal with the trailing `;` in the code:
+There are 3 ways to deal with the trailing `;` in the code:
 1.  append `;` after the `console.log($FIRST_ARG, $$$REMAINING_ARGS)` pattern in the top right of the Playground
-2.  accept it as it is
+2.  accept it as it is 🫣
 3.  use a Strictness of `Relaxed` and additionally specify `expression_statement` as a Selector
 
 Although option 3 might look tempting, personally I'm hesitant to use it because based on the [documentation of the `Relaxed` strictness level](https://ast-grep.github.io/advanced/match-algorithm.html#strictness-table),
@@ -206,14 +206,27 @@ Since the CLI `--pattern` option can’t express multiple alternatives, we’ll 
 💡 **NOTE** Although you typically define ast-grep rules in `.yml` / `.yaml` files, you can also use inline YAML via
 [`--inline-rules`](https://ast-grep.github.io/guide/rule-config.html#ast-grep-scan-inline-rules).
 
-I've prefilled a YAML rule with the same `console.log($FIRST_ARG, $$$REMAINING_ARGS)` pattern.
-Notice that the `console.log` (call) expression in test code is no longer matched.
-Since no strictness level is specified in the YAML rule, the default strictness level of `smart` is used.
+Activate the YAML tab in the top-right of de Playground.
 
-To be able to specify the strictness level of `ast` we need to change the `pattern` inside the YAML to a
+Notice now the following ast-grep YAML rule is shown in the top-right of the Playground: 
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: search-console-log
+language: ts
+rule:
+  pattern: console.log($FIRST_ARG, $$$REMAINING_ARGS)
+```
+
+Also, notice that the `console.log` (call) expression in test code is no longer matched.
+This is because no strictness level is specified in the ast-grep YAML rule, and therefore the default strictness level
+of `smart` is used.
+
+To be able to specify the strictness level of `ast` we need to change the `pattern` in the YAML to a
 [Pattern Object](https://ast-grep.github.io/guide/rule-config/atomic-rule.html#pattern-object):
 
 ```yaml
+# ..
 rule:
   pattern:
     context: console.log($FIRST_ARG, $$$REMAINING_ARGS)

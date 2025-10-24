@@ -48,8 +48,8 @@ so `ast-grep scan` automatically includes all lint rules when no `--rule` flag i
 
 ### Adding an autofix
 To make our lint rule fixable, we need to tell ast-grep which AST node should be replaced.
-Therefor we'll change our rule to target the `decorator` node (the `@property(...)` part) inside a `public_field_definition`
-instead of targetting the `public_field_definition` AST node
+Therefore, we'll change our rule to target the `decorator` node (the `@property(...)` part) inside a `public_field_definition`
+instead of targeting the `public_field_definition` AST node
 
 For clarity, we’ll split the YAML into two rules using the `---` document separator.
 

@@ -14,6 +14,12 @@ During the workshop, and later on, the following resources might be useful:
       [Composite Rules](https://ast-grep.github.io/reference/rule.html#composite-rules)
     - [List of Languages with Built-in Support](https://ast-grep.github.io/reference/languages.html)
     - [Using ast-grep with AI Tools](https://ast-grep.github.io/advanced/prompting.html)
+    - [How ast-grep Works: A bird's-eye view](https://ast-grep.github.io/advanced/how-ast-grep-works.html) with
+      underneath the following additional articles:
+       - [Core Concepts in ast-grep's Pattern](https://ast-grep.github.io/advanced/core-concepts.html)
+       - [Deep Dive into ast-grep's Pattern Syntax](https://ast-grep.github.io/advanced/pattern-parse.html)
+       - [Deep Dive into ast-grep's Match Algorithm](https://ast-grep.github.io/advanced/match-algorithm.html)
+       - [Find & Patch: A Novel Functional Programming like Code Rewrite Scheme](https://ast-grep.github.io/advanced/find-n-patch.html)
  - [codemod.com](https://codemod.com/), nowadays uses ast-grep for its code migrations
    (also known as [codemods](https://martinfowler.com/articles/codemods-api-refactoring.html)):
     - [Codemod Studio](https://app.codemod.com/studio): an online studio that's like ast-grep Playground,
